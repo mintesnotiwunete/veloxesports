@@ -57,6 +57,7 @@ model Tournament {
   name              String
   slug              String   @unique
   description       String?
+  bannerUrl         String?
   format            String
   status            String   @default("UPCOMING")
   entryFeeStars     Int      @default(0)
