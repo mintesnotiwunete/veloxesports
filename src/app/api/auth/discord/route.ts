@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   // State parameter to prevent CSRF and pass user context
   const state = Buffer.from(JSON.stringify({ telegramUserId })).toString('base64');
 
-  const authUrl = "https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify&state=${state}";
+  const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify&state=${state}`;
 
   return NextResponse.redirect(authUrl);
 }

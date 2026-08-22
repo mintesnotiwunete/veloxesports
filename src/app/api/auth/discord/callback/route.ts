@@ -37,7 +37,7 @@ export async function GET(req: Request) {
 
     // 3. Get Discord User Profile
     const userResponse = await fetch('https://discord.com/api/users/@me', {
-      headers: { Authorization: "Bearer ${tokenData.access_token}" }
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
     });
 
     const discordUser = await userResponse.json();
@@ -53,12 +53,12 @@ export async function GET(req: Request) {
         where: { userId: user.id },
         update: {
           discordUserId: discordUser.id,
-          discordUsername: "@${discordUser.username}",
+          discordUsername: `@${discordUser.username}`,
         },
         create: {
           userId: user.id,
           discordUserId: discordUser.id,
-          discordUsername: "@${discordUser.username}",
+          discordUsername: `@${discordUser.username}`,
         }
       });
     }

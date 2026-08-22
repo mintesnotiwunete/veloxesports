@@ -247,7 +247,7 @@ export default function ProfilePage() {
             </div>
           </div>
           
-          <Link href="/api/auth/discord" onClick={() => triggerHaptic('medium')}>
+          <Link href={user?.id ? `/api/auth/discord?userId=${user.id}` : "#"} onClick={() => triggerHaptic('medium')}>
             <Button size="sm" className="bg-[#5865F2] hover:bg-[#4752C4] text-white text-xs font-bold uppercase tracking-wider h-8 rounded-lg">
               {userData?.discordAccount ? 'Linked' : 'Connect'}
             </Button>
