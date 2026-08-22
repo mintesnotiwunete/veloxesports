@@ -6,15 +6,14 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
-  const [userCount, tournamentCount, gameCount, payments] = await Promise.all([
-    prisma.user.count(),
-    prisma.tournament.count(),
-    prisma.game.count(),
-    prisma.payment.aggregate({
-      _sum: { amountStars: true },
-      where: { status: 'SUCCESS' }
-    })
-  ]);
+  // Execute sequentially to avoid exhausting the serverless connection pool
+  const userCount = await prisma.user.count();
+  const tournamentCount = await prisma.tournament.count();
+  const gameCount = await prisma.game.count();
+  const payments = await prisma.payment.aggregate({
+    _sum: { amountStars: true },
+    where: { status: 'SUCCESS' }
+  });
 
   const stats = [
     { name: 'Total Players', value: userCount, icon: Users, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-500/20' },

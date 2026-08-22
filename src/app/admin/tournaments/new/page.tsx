@@ -58,7 +58,7 @@ export default function NewTournament() {
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Prize Pool</label>
-                <Input name="prizePool" required defaultValue="" className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white" />
+                <Input name="prizePool" required defaultValue="$1000" className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white" />
               </div>
             </div>
 
