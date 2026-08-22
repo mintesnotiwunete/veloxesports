@@ -83,7 +83,7 @@ export async function POST(req: Request) {
       }
     });
 
-    const invoicePayload = "registration_${registration.id}";
+    const invoicePayload = `registration_${registration.id}`;
     
     await prisma.payment.create({
       data: {
@@ -105,13 +105,13 @@ export async function POST(req: Request) {
     }
 
     // Call Telegram API to create invoice link
-    const telegramApiUrl = "https://api.telegram.org/bot${botToken}/createInvoiceLink";
+    const telegramApiUrl = `https://api.telegram.org/bot${botToken}/createInvoiceLink`;
     const invoiceResponse = await fetch(telegramApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: "Registration: ${tournament.name}",
-        description: "Entry fee for ${tournament.name}",
+        title: `Registration: ${tournament.name}`,
+        description: `Entry fee for ${tournament.name}`,
         payload: invoicePayload,
         provider_token: '', // Must be empty for Stars
         currency: 'XTR',
