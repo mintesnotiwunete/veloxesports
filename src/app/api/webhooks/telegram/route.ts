@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       
       const ok = !!payment && payment.status === 'PENDING';
       
-      await fetch("https://api.telegram.org/bot${botToken}/answerPreCheckoutQuery", {
+      await fetch(`https://api.telegram.org/bot${botToken}/answerPreCheckoutQuery`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
