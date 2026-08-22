@@ -48,7 +48,7 @@ export function NewTournamentForm({ games }: { games: any[] }) {
         <Input name="bannerUrl" className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white" placeholder="https://example.com/image.jpg (Optional)" />
       </div>
       
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Entry Fee (Stars)</label>
           <Input name="entryFeeStars" type="number" required defaultValue="50" className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white" />
@@ -59,7 +59,7 @@ export function NewTournamentForm({ games }: { games: any[] }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Max Players</label>
           <Input name="maxPlayers" type="number" required defaultValue="64" className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white" />
