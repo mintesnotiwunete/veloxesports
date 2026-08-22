@@ -5,8 +5,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Tournaments', href: '/admin/tournaments', icon: Trophy },
-    { name: 'Players', href: '/admin', icon: Users },
-    { name: 'Settings', href: '/admin', icon: Settings },
+    { name: 'Players', href: '/admin/players', icon: Users },
+    { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
 
   return (
