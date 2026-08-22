@@ -2,44 +2,41 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, BarChart2, User } from 'lucide-react';
+import { Home, Trophy, ListOrdered, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function BottomNav() {
   const pathname = usePathname();
 
-  const navItems = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'Tournaments', href: '/tournaments', icon: Trophy },
-    { name: 'Standings', href: '/standings', icon: BarChart2 },
-    { name: 'Profile', href: '/profile', icon: User },
+  const links = [
+    { href: '/', icon: Home, label: 'Hub' },
+    { href: '/tournaments', icon: Trophy, label: 'Tourneys' },
+    { href: '/standings', icon: ListOrdered, label: 'Ranks' },
+    { href: '/profile', icon: User, label: 'Profile' },
   ];
 
-  // Hide nav on certain pages if needed, e.g., admin
-  if (pathname?.startsWith('/admin')) {
-    return null;
-  }
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-border bg-background/80 backdrop-blur-md pb-safe">
-      {navItems.map((item) => {
-        const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
-        const Icon = item.icon;
-        
-        return (
-          <Link
-            key={item.name}
-            href={item.href}
-            className={cn(
-              "flex flex-col items-center justify-center w-full h-full space-y-1 text-xs transition-colors",
-              isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <Icon size={20} className={cn(isActive && "stroke-[2.5px]")} />
-            <span>{item.name}</span>
-          </Link>
-        );
-      })}
+    <div className="fixed bottom-4 left-4 right-4 z-50">
+      <nav className="flex items-center justify-around bg-background/70 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-lg shadow-black/50">
+        {links.map(({ href, icon: Icon, label }) => {
+          const isActive = pathname === href || (href !== '/' && pathname?.startsWith(href));
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all duration-200",
+                isActive 
+                  ? "text-primary bg-primary/10 box-glow" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              )}
+            >
+              <Icon className={cn("w-5 h-5 mb-0.5", isActive && "drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]")} />
+              <span className="text-[9px] font-bold uppercase tracking-wider">{label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 }

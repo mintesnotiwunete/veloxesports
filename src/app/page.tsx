@@ -1,117 +1,100 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTelegram } from '@/components/TelegramProvider';
-import { Bell, Trophy, Users, Star, Calendar, Clock } from 'lucide-react';
-import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Trophy, Gamepad2, Calendar, ChevronRight, Zap } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export default function Home() {
   const { user } = useTelegram();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
-    <div className="flex flex-col min-h-screen p-4 space-y-6">
-      {/* Header */}
-      <header className="flex items-center justify-between">
+    <div className="flex flex-col space-y-8 p-4 pt-8 pb-24 max-w-md mx-auto">
+      
+      {/* Header Profile Section */}
+      <div className="flex items-center justify-between bg-glass rounded-2xl p-4">
         <div className="flex items-center space-x-3">
-          <Avatar>
+          <Avatar className="h-12 w-12 border-2 border-primary box-glow">
             <AvatarImage src={user?.photo_url} />
-            <AvatarFallback className="bg-primary/20 text-primary">
-              {user?.first_name?.charAt(0) || 'U'}
+            <AvatarFallback className="bg-secondary text-secondary-foreground font-display font-bold">
+              {user?.first_name?.charAt(0) || 'V'}
             </AvatarFallback>
           </Avatar>
           <div>
-            <h2 className="text-sm font-semibold">{user ? user.first_name : 'Guest'}</h2>
-            <p className="text-xs text-muted-foreground">{user?.username ? `@${user.username}` : 'Welcome back'}</p>
+            <h2 className="text-lg font-display font-bold uppercase tracking-wide">{user ? user.first_name : 'Guest Player'}</h2>
+            <p className="text-xs text-primary font-medium flex items-center">
+              <Zap className="w-3 h-3 mr-1" /> {user?.username ? '@'+user.username : 'Ready to dominate'}
+            </p>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Bell className="w-5 h-5" />
-        </Button>
-      </header>
+      </div>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/80 to-destructive/80 p-6 text-primary-foreground">
-        <div className="absolute inset-0 bg-black/20 mix-blend-overlay" />
-        <div className="relative z-10 space-y-4">
-          <h1 className="text-3xl font-black italic tracking-tighter uppercase drop-shadow-md">
-            Compete. Win. Dominate.
-          </h1>
-          <div className="space-y-1">
-            <Badge variant="secondary" className="bg-white/20 hover:bg-white/30 text-white border-0 backdrop-blur-sm">Featured Tournament</Badge>
-            <h3 className="text-xl font-bold">Winter Clash 2026</h3>
-            <p className="text-sm font-medium text-white/80">🎯 Fortnite</p>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center space-x-1">
-              <Trophy className="w-4 h-4 text-yellow-400" />
-              <span>$5,000</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Users className="w-4 h-4" />
-              <span>128 / 256</span>
-            </div>
-          </div>
-          
-          <Button className="w-full bg-white text-black hover:bg-white/90 font-bold mt-2">
-            REGISTER NOW - 50 <Star className="w-4 h-4 ml-1 fill-yellow-500 text-yellow-500" />
-          </Button>
+      {/* Hero Banner */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-background to-secondary border border-primary/30 p-6 box-glow">
+        <div className="absolute top-0 right-0 p-4 opacity-10">
+          <Gamepad2 className="w-32 h-32" />
         </div>
-      </section>
+        <Badge variant="outline" className="border-primary text-primary bg-primary/10 mb-4">LIVE NOW</Badge>
+        <h1 className="text-4xl font-display font-black uppercase italic leading-none mb-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">Winter Clash</span>
+          <br />2026
+        </h1>
+        <p className="text-sm text-muted-foreground mb-6 max-w-[200px]">Compete for the ,000 prize pool in Fortnite.</p>
+        <Link href="/tournaments/winter-clash-2026" className="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-bold transition-all bg-primary text-primary-foreground hover:bg-primary/80 h-10 px-6 box-glow uppercase tracking-wider">
+          Join Tournament <ChevronRight className="ml-1 w-4 h-4" />
+        </Link>
+      </div>
 
       {/* Upcoming Tournaments */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold tracking-tight">Upcoming Tournaments</h2>
-          <Link href="/tournaments" className="text-sm text-primary font-medium hover:underline">
-            View All
-          </Link>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between px-2">
+          <h3 className="text-xl font-display font-bold uppercase tracking-wider flex items-center">
+            <Trophy className="w-5 h-5 mr-2 text-primary" /> Upcoming Matches
+          </h3>
+          <Link href="/tournaments" className="text-xs font-bold text-primary hover:underline uppercase">View All</Link>
         </div>
-
+        
         <div className="grid gap-4">
-          {[1, 2].map((i) => (
-            <Card key={i} className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
-              <CardHeader className="p-4 pb-2 flex flex-row items-start justify-between space-y-0">
-                <div>
-                  <div className="flex items-center space-x-1.5 mb-1">
-                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">⚽ EA Sports FC 26</span>
+          {[1, 2, 3].map((i) => (
+            <Link key={i} href={`/tournaments/spring-cup-${i}`}>
+              <Card className="bg-glass border-white/5 hover:border-primary/50 transition-all hover:box-glow overflow-hidden group">
+                <div className="flex h-24">
+                  <div className="w-1/3 bg-secondary flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Gamepad2 className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
-                  <CardTitle className="text-base font-bold">Spring Cup {i}</CardTitle>
-                </div>
-                <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10">Registration Open</Badge>
-              </CardHeader>
-              <CardContent className="p-4 pt-2 pb-0">
-                <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground">
-                  <div className="flex items-center space-x-1.5">
-                    <Calendar className="w-4 h-4" />
-                    <span>Aug 30, 2026</span>
-                  </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Clock className="w-4 h-4" />
-                    <span>18:00 UTC</span>
-                  </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Trophy className="w-4 h-4 text-yellow-500" />
-                    <span className="text-foreground font-medium">$1,000</span>
-                  </div>
-                  <div className="flex items-center space-x-1.5">
-                    <Users className="w-4 h-4" />
-                    <span>32 / 64</span>
+                  <div className="w-2/3 p-3 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-display font-bold uppercase truncate">Spring Cup {i}</h4>
+                        <Badge variant="secondary" className="text-[10px] px-1 py-0">FC 26</Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1 flex items-center">
+                        <Calendar className="w-3 h-3 mr-1" /> Starts in {i} days
+                      </p>
+                    </div>
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-sm">,000 Prize</span>
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-              <CardFooter className="p-4">
-                <Link href={`/tournaments/spring-cup-${i}`} className="w-full inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2">
-                  View Tournament
-                </Link>
-              </CardFooter>
-            </Card>
+              </Card>
+            </Link>
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 }

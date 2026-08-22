@@ -1,16 +1,20 @@
-import Script from 'next/script';
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Rajdhani } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
-
 import { TelegramProvider } from "@/components/TelegramProvider";
 import { BottomNav } from "@/components/BottomNav";
+import Script from 'next/script';
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const rajdhani = Rajdhani({ 
+  weight: ['400', '500', '600', '700'],
+  subsets: ["latin"], 
+  variable: "--font-rajdhani" 
+});
 
 export const metadata: Metadata = {
-  title: "Esports Tournament Platform",
-  description: "Compete, win, dominate.",
+  title: "Velox Esports",
+  description: "Next-gen Telegram Esports Platform",
 };
 
 export default function RootLayout({
@@ -23,15 +27,12 @@ export default function RootLayout({
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       </head>
-      <body className={inter.className + " min-h-screen bg-background text-foreground antialiased"}>
+      <body className={"min-h-screen bg-background text-foreground antialiased pb-20   font-sans"}>
         <TelegramProvider>
-          <main className="pb-20">
-            {children}
-          </main>
+          {children}
           <BottomNav />
         </TelegramProvider>
       </body>
     </html>
   );
 }
-
