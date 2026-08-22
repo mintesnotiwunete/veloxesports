@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useTelegram } from '@/components/TelegramProvider';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, Gamepad2, Calendar, ChevronRight, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { LandingPage } from '@/components/LandingPage';
 
 export default function Home() {
-  const { user } = useTelegram();
+  const { user, initData } = useTelegram();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -19,6 +20,17 @@ export default function Home() {
   }, []);
 
   if (!mounted) return null;
+
+  // If there is no initData (not in Telegram), show the public Landing Page
+  if (!initData && process.env.NODE_ENV === 'production') {
+    return <LandingPage />;
+  }
+  
+  // Show landing page in dev if not mocked properly, but we mock it usually.
+  // Actually let's just allow developers to see the Hub if they have mocked initData.
+  if (!initData) {
+     return <LandingPage />;
+  }
 
   return (
     <div className="flex flex-col space-y-8 p-4 pt-8 pb-24 max-w-md mx-auto">
@@ -51,7 +63,7 @@ export default function Home() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">Winter Clash</span>
           <br />2026
         </h1>
-        <p className="text-sm text-muted-foreground mb-6 max-w-[200px]">Compete for the ,000 prize pool in Fortnite.</p>
+        <p className="text-sm text-muted-foreground mb-6 max-w-[200px]">Compete for the $5,000 prize pool in Fortnite.</p>
         <Link href="/tournaments/winter-clash-2026" className="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-bold transition-all bg-primary text-primary-foreground hover:bg-primary/80 h-10 px-6 box-glow uppercase tracking-wider">
           Join Tournament <ChevronRight className="ml-1 w-4 h-4" />
         </Link>
