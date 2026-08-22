@@ -77,6 +77,8 @@ export async function POST(req: Request) {
           );
         }
       }
+      return NextResponse.json({ success: true });
+    }
       
     // Handle /start command
     if (update.message?.text === '/start' || update.message?.text === '/open') {
