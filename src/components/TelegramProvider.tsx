@@ -36,28 +36,32 @@ export function TelegramProvider({ children }: { children: ReactNode }) {
       tg.expand();
       
       const initDataString = tg.initData;
-      const user = tg.initDataUnsafe?.user as TelegramUser;
+      const tgUser = tg.initDataUnsafe?.user as TelegramUser;
       
-      setInitData(initDataString);
-      setUser(user || null);
-      setIsReady(true);
+      if (!isReady) {
+        setInitData(initDataString);
+        setUser(tgUser || null);
+        setIsReady(true);
+      }
       
       // Setup telegram app theme matching
       tg.setHeaderColor('#000000');
       tg.setBackgroundColor('#000000');
     } else {
       // Mock data for local testing outside Telegram
-      if (process.env.NODE_ENV === 'development') {
-        setUser({
-          id: 12345678,
-          first_name: 'Dev',
-          username: 'developer',
-        });
-        setInitData('mock_init_data');
+      if (!isReady) {
+        if (process.env.NODE_ENV === 'development') {
+          setUser({
+            id: 12345678,
+            first_name: 'Dev',
+            username: 'developer',
+          });
+          setInitData('mock_init_data');
+        }
+        setIsReady(true);
       }
-      setIsReady(true);
     }
-  }, []);
+  }, [isReady]);
 
   return (
     <TelegramContext.Provider value={{ user, initData, isReady }}>
