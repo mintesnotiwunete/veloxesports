@@ -20,20 +20,39 @@ import {
   ChevronRight,
   UserCheck
 } from 'lucide-react';
-import { getUserPassport } from '@/app/actions';
+import { getUserPassport, getAllGames, linkGameProfile } from '@/app/actions';
 import { triggerHaptic } from '@/lib/haptics';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function ProfilePage() {
   const { user } = useTelegram();
   const [userData, setUserData] = useState<any>(null);
+  const [games, setGames] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'achievements' | 'history'>('achievements');
   const [copied, setCopied] = useState(false);
+  const [linkingGame, setLinkingGame] = useState(false);
+  const [selectedGameId, setSelectedGameId] = useState('');
+  const [gameUsername, setGameUsername] = useState('');
 
   useEffect(() => {
     if (user?.id) {
       getUserPassport(user.id).then(setUserData).catch(console.error);
     }
+    getAllGames().then(setGames).catch(console.error);
   }, [user?.id]);
+
+  const handleLinkGame = async () => {
+    if (!selectedGameId || !gameUsername || !user?.id) return;
+    triggerHaptic('medium');
+    const res = await linkGameProfile(user.id, selectedGameId, gameUsername);
+    if (res) {
+      triggerHaptic('success');
+      setLinkingGame(false);
+      setGameUsername('');
+      getUserPassport(user.id).then(setUserData).catch(console.error);
+    }
+  };
 
   const registrations = userData?.registrations || [];
   const tournamentsCount = registrations.length;
@@ -165,6 +184,53 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Linked Game Accounts */}
+      <Card className="bg-card/70 border-white/10 rounded-2xl overflow-hidden">
+        <CardContent className="p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-bold uppercase tracking-wider text-foreground">Linked Game Accounts</p>
+            <Button size="sm" variant="ghost" onClick={() => setLinkingGame(!linkingGame)} className="text-[10px] uppercase font-bold text-cyan-400 p-0 h-auto hover:bg-transparent">
+              {linkingGame ? 'Cancel' : '+ Add Account'}
+            </Button>
+          </div>
+
+          {userData?.gameProfiles?.length > 0 && (
+            <div className="space-y-2">
+              {userData.gameProfiles.map((gp: any) => (
+                <div key={gp.id} className="flex justify-between items-center bg-black/30 p-2 rounded-lg border border-white/5">
+                  <span className="text-[10px] text-muted-foreground uppercase font-bold">{gp.game.name}</span>
+                  <span className="text-xs font-mono text-cyan-400">{gp.gameUsername}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {linkingGame && (
+            <div className="space-y-2 bg-black/50 p-3 rounded-xl border border-cyan-500/30">
+              <Select value={selectedGameId} onValueChange={(val) => setSelectedGameId(val || '')}>
+                <SelectTrigger className="bg-background border-white/10 text-xs">
+                  <SelectValue placeholder="Select Game" />
+                </SelectTrigger>
+                <SelectContent>
+                  {games.map(g => (
+                    <SelectItem key={g.id} value={g.id} className="text-xs">{g.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input 
+                placeholder="In-Game UID / Username" 
+                value={gameUsername}
+                onChange={e => setGameUsername(e.target.value)}
+                className="bg-background border-white/10 text-xs h-9"
+              />
+              <Button onClick={handleLinkGame} disabled={!selectedGameId || !gameUsername} className="w-full h-8 text-xs font-bold uppercase bg-cyan-500 text-black hover:bg-cyan-400">
+                Save Account
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Discord Connection Status */}
       <Card className="bg-card/70 border-white/10 rounded-2xl overflow-hidden">

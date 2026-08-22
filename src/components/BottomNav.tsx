@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, ListOrdered, User } from 'lucide-react';
+import { Home, Trophy, Crown, User, Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTelegram } from './TelegramProvider';
 import { triggerHaptic } from '@/lib/haptics';
@@ -18,35 +18,37 @@ export function BottomNav() {
   // in dev, we might mock initData, but if it's explicitly null, hide it to test landing page
   if (!initData) return null;
 
-  const links = [
+  const navItems = [
     { href: '/', icon: Home, label: 'Hub' },
-    { href: '/tournaments', icon: Trophy, label: 'Tourneys' },
-    { href: '/standings', icon: ListOrdered, label: 'Ranks' },
-    { href: '/profile', icon: User, label: 'Profile' },
+    { href: '/tournaments', icon: Trophy, label: 'Compete' },
+    { href: '/matches', icon: Swords, label: 'Matches' },
+    { href: '/standings', icon: Crown, label: 'Rankings' },
+    { href: '/profile', icon: User, label: 'Passport' },
   ];
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50">
-      <nav className="flex items-center justify-around bg-background/70 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-lg shadow-black/50">
-        {links.map(({ href, icon: Icon, label }) => {
-          const isActive = pathname === href || (href !== '/' && pathname?.startsWith(href));
-          return (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => triggerHaptic('selection')}
-              className={cn(
-                "flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all duration-200",
-                isActive 
-                  ? "text-primary bg-primary/10 box-glow scale-105" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-              )}
-            >
-              <Icon className={cn("w-5 h-5 mb-0.5", isActive && "drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]")} />
-              <span className="text-[9px] font-bold uppercase tracking-wider">{label}</span>
-            </Link>
-          );
-        })}
+    <div className="fixed bottom-0 left-0 right-0 p-4 z-50 pointer-events-none">
+      <nav className="mx-auto max-w-md bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl pointer-events-auto box-glow">
+        <ul className="flex justify-between items-center relative">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.href} className="flex-1 relative z-10">
+                <Link
+                  href={item.href}
+                  onClick={() => triggerHaptic('light')}
+                  className={cn(
+                    "flex flex-col items-center justify-center py-2 transition-all duration-300",
+                    isActive ? "text-primary scale-110" : "text-muted-foreground hover:text-white"
+                  )}
+                >
+                  <item.icon className={cn("w-5 h-5 mb-1 transition-all duration-300", isActive && "drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]")} />
+                  <span className="text-[9px] font-display font-bold uppercase tracking-wider">{item.label}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
     </div>
   );

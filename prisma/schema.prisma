@@ -24,6 +24,16 @@ model User {
   payments         Payment[]
   standings        Standing[]
   discordAccount   DiscordAccount?
+
+  matchesAsPlayer1 Match[] @relation("MatchPlayer1")
+  matchesAsPlayer2 Match[] @relation("MatchPlayer2")
+  matchesWon       Match[] @relation("MatchWinner")
+  
+  captainedTeams   Team[]       @relation("TeamCaptain")
+  teamMemberships  TeamMember[]
+  gameProfiles     GameProfile[]
+  notifications    Notification[]
+  payouts          Payout[]
 }
 
 model Game {
@@ -36,7 +46,8 @@ model Game {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
-  tournaments Tournament[]
+  tournaments  Tournament[]
+  gameProfiles GameProfile[]
 }
 
 model Tournament {
@@ -67,6 +78,7 @@ model Tournament {
   payments          Payment[]
   matches           Match[]
   standings         Standing[]
+  payouts           Payout[]
 }
 
 model Registration {
@@ -114,7 +126,14 @@ model Match {
   player2Score Int      @default(0)
   winnerId     String?
 
+  evidenceUrl   String?
+  submittedById String?
+  disputeReason String?
+
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  player1      User?      @relation("MatchPlayer1", fields: [player1Id], references: [id])
+  player2      User?      @relation("MatchPlayer2", fields: [player2Id], references: [id])
+  winner       User?      @relation("MatchWinner", fields: [winnerId], references: [id])
 }
 
 model Standing {
@@ -140,4 +159,77 @@ model DiscordAccount {
   linkedAt        DateTime @default(now())
 
   user            User     @relation(fields: [userId], references: [id])
+}
+
+model Team {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  slug        String       @unique
+  description String?
+  logoUrl     String?
+  captainId   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  captain     User         @relation("TeamCaptain", fields: [captainId], references: [id])
+  members     TeamMember[]
+}
+
+model TeamMember {
+  id       String   @id @default(cuid())
+  teamId   String
+  userId   String
+  role     String   @default("MEMBER")
+  joinedAt DateTime @default(now())
+
+  team     Team     @relation(fields: [teamId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([teamId, userId])
+}
+
+model GameProfile {
+  id           String   @id @default(cuid())
+  userId       String
+  gameId       String
+  gameUsername String
+  linkedAt     DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id])
+  game         Game     @relation(fields: [gameId], references: [id])
+
+  @@unique([userId, gameId])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  type      String   @default("INFO")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("INFO")
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Payout {
+  id           String   @id @default(cuid())
+  userId       String
+  tournamentId String
+  amount       Int
+  status       String   @default("PROCESSING")
+  createdAt    DateTime @default(now())
+
+  user         User       @relation(fields: [userId], references: [id])
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
 }

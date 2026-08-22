@@ -2,6 +2,11 @@ import { prisma } from '@/lib/prisma';
 import { Card, CardContent } from '@/components/ui/card';
 import { Trophy, Users, Star, Gamepad2 } from 'lucide-react';
 import Link from 'next/link';
+import { MatchVerificationList } from './MatchVerificationList';
+import { AdminAnnouncementForm } from './AdminAnnouncementForm';
+import { DisputeResolutionList } from './DisputeResolutionList';
+import { PrizePayoutList } from './PrizePayoutList';
+import { getDisputedMatches, getPendingMatches, getPayouts } from '@/app/actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,6 +19,9 @@ export default async function AdminDashboard() {
     _sum: { amountStars: true },
     where: { status: 'SUCCESS' }
   });
+  const pendingMatches = await getPendingMatches();
+  const disputedMatches = await getDisputedMatches();
+  const payouts = await getPayouts();
 
   const stats = [
     { name: 'Total Players', value: userCount, icon: Users, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-500/20' },
@@ -53,26 +61,56 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      <div className="mt-12">
-        <div className="flex items-center space-x-4 mb-6 opacity-80">
-          <div className="flex space-x-1">
-             <div className="w-3 h-1 bg-cyan-500 skew-x-12" />
-             <div className="w-2 h-1 bg-cyan-500 skew-x-12" />
-             <div className="w-1 h-1 bg-cyan-500 skew-x-12" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+        <div className="space-y-6">
+          <div className="flex items-center space-x-4 opacity-80">
+            <div className="flex space-x-1">
+               <div className="w-3 h-1 bg-yellow-500 skew-x-12" />
+               <div className="w-2 h-1 bg-yellow-500 skew-x-12" />
+               <div className="w-1 h-1 bg-yellow-500 skew-x-12" />
+            </div>
+            <span className="text-yellow-500 font-display uppercase tracking-widest text-sm font-bold">Pending Verifications</span>
           </div>
-          <span className="text-cyan-400 font-display uppercase tracking-widest text-sm font-bold">Recent Activity</span>
-          <div className="flex space-x-1">
-             <div className="w-1 h-1 bg-cyan-500 -skew-x-12" />
-             <div className="w-2 h-1 bg-cyan-500 -skew-x-12" />
-             <div className="w-3 h-1 bg-cyan-500 -skew-x-12" />
-          </div>
+          <MatchVerificationList initialMatches={pendingMatches} />
         </div>
-        
-        <Card className="bg-[#0d1412] border-white/5">
-          <CardContent className="p-12 text-center text-gray-500 font-medium">
-            No recent activity to display.
-          </CardContent>
-        </Card>
+
+        <div className="space-y-6">
+          <div className="flex items-center space-x-4 opacity-80">
+            <div className="flex space-x-1">
+               <div className="w-3 h-1 bg-cyan-500 skew-x-12" />
+               <div className="w-2 h-1 bg-cyan-500 skew-x-12" />
+               <div className="w-1 h-1 bg-cyan-500 skew-x-12" />
+            </div>
+            <span className="text-cyan-500 font-display uppercase tracking-widest text-sm font-bold">Comms Link</span>
+          </div>
+          <AdminAnnouncementForm />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        <div className="space-y-6">
+          <div className="flex items-center space-x-4 opacity-80">
+            <div className="flex space-x-1">
+               <div className="w-3 h-1 bg-red-500 skew-x-12" />
+               <div className="w-2 h-1 bg-red-500 skew-x-12" />
+               <div className="w-1 h-1 bg-red-500 skew-x-12" />
+            </div>
+            <span className="text-red-500 font-display uppercase tracking-widest text-sm font-bold">Active Disputes</span>
+          </div>
+          <DisputeResolutionList initialMatches={disputedMatches} />
+        </div>
+
+        <div className="space-y-6">
+          <div className="flex items-center space-x-4 opacity-80">
+            <div className="flex space-x-1">
+               <div className="w-3 h-1 bg-emerald-500 skew-x-12" />
+               <div className="w-2 h-1 bg-emerald-500 skew-x-12" />
+               <div className="w-1 h-1 bg-emerald-500 skew-x-12" />
+            </div>
+            <span className="text-emerald-500 font-display uppercase tracking-widest text-sm font-bold">Prize Payouts</span>
+          </div>
+          <PrizePayoutList initialPayouts={payouts} />
+        </div>
       </div>
     </div>
   );
