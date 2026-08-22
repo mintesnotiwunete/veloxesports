@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Trophy, Users, Calendar, Clock, Star, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { TournamentBracket } from '@/components/TournamentBracket';
+import { getTournament } from '@/app/actions';
 
 export default function TournamentPage() {
   const params = useParams();
@@ -19,22 +20,15 @@ export default function TournamentPage() {
   const [status, setStatus] = useState<'IDLE' | 'SUCCESS' | 'ERROR'>('IDLE');
 
   useEffect(() => {
-    setTimeout(() => {
-      setTournament({
-        id: 'cmt4cm7w2000314bhmgav86go', 
-        name: 'Winter Clash 2026',
-        game: { name: 'Fortnite' },
-        status: 'REGISTRATION_OPEN',
-        entryFeeStars: 50,
-        prizePool: '$5000',
-        maxPlayers: 256,
-        currentPlayers: 128,
-        registrationEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        startTime: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
-        rules: 'Standard Battle Royale rules apply. Top 10 advance to finals.'
+    getTournament(params.slug as string)
+      .then(t => {
+        setTournament(t);
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.error(e);
+        setLoading(false);
       });
-      setLoading(false);
-    }, 500);
   }, [params.slug]);
 
   const handleRegister = async () => {
@@ -135,14 +129,14 @@ export default function TournamentPage() {
             <CardContent className="p-4 flex flex-col items-center justify-center text-center space-y-1">
               <Calendar className="w-6 h-6 text-primary mb-1" />
               <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Registration Closes</span>
-              <span className="text-sm font-bold">In 7 Days</span>
+              <span className="text-sm font-bold">{new Date(tournament.registrationEnd).toLocaleDateString()}</span>
             </CardContent>
           </Card>
           <Card className="bg-glass border-white/5">
             <CardContent className="p-4 flex flex-col items-center justify-center text-center space-y-1">
               <Clock className="w-6 h-6 text-primary mb-1" />
               <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Tournament Starts</span>
-              <span className="text-sm font-bold">Aug 30, 2026</span>
+              <span className="text-sm font-bold">{new Date(tournament.startTime).toLocaleDateString()}</span>
             </CardContent>
           </Card>
         </div>
@@ -152,7 +146,7 @@ export default function TournamentPage() {
           <h3 className="text-lg font-display font-bold uppercase mb-2 tracking-wider">Tournament Rules</h3>
           <Card className="bg-background/40 border-white/5">
             <CardContent className="p-4 text-sm text-muted-foreground leading-relaxed">
-              {tournament.rules}
+              {tournament.rules || 'Standard rules apply. Good luck and have fun!'}
             </CardContent>
           </Card>
         </div>
