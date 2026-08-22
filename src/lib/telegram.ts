@@ -11,7 +11,7 @@ export function validateWebAppData(initData: string, botToken: string): boolean 
   
   const dataCheckString = Array.from(urlParams.entries())
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => "${key}=${value}")
+    .map(([key, value]) => `${key}=${value}`)
     .join('\n');
     
   const secretKey = crypto.createHmac('sha256', 'WebAppData').update(botToken).digest();
