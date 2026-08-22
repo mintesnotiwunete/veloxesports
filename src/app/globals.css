@@ -83,3 +83,4 @@
     @apply bg-background/60 backdrop-blur-xl border border-white/10;
   }
 }
+.css-invert-calendar::-webkit-calendar-picker-indicator { filter: invert(1); }

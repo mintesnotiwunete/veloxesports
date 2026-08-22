@@ -79,6 +79,21 @@ export function NewTournamentForm({ games }: { games: any[] }) {
         </div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Registration Closes</label>
+          <Input name="registrationEnd" type="datetime-local" required className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white css-invert-calendar" />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Start Time</label>
+          <Input name="startTime" type="datetime-local" required className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white css-invert-calendar" />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">End Time (Optional)</label>
+          <Input name="endTime" type="datetime-local" className="bg-[#070b0a] border-white/10 focus-visible:ring-cyan-500 text-white css-invert-calendar" />
+        </div>
+      </div>
+
       <Button disabled={loading} type="submit" className="w-full bg-cyan-950/40 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-900/60 rounded-sm font-bold uppercase tracking-widest text-sm transition-all box-glow mt-4 h-12">
         {loading ? 'Deploying...' : 'Launch Tournament'}
       </Button>

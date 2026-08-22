@@ -34,8 +34,9 @@ export async function POST(req: Request) {
         maxPlayers: parseInt(data.maxPlayers) || 64,
         currentPlayers: 0,
         registrationStart: new Date(),
-        registrationEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        startTime: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000),
+        registrationEnd: new Date(data.registrationEnd),
+        startTime: new Date(data.startTime),
+        endTime: data.endTime ? new Date(data.endTime) : null,
         gameId: game.id,
         bannerUrl: data.bannerUrl || null
       }
