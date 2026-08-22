@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Users, Shield, Trophy } from 'lucide-react';
 import Image from 'next/image';
-import BottomNav from '@/components/BottomNav';
 
 export default async function TeamsPage() {
   const teams = await getAllTeams();
@@ -74,8 +73,6 @@ export default async function TeamsPage() {
           </div>
         )}
       </div>
-
-      <BottomNav />
     </div>
   );
 }
