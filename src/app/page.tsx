@@ -137,43 +137,38 @@ export default function Home() {
         </Card>
       )}
 
-      {/* My Squad */}
+      {/* My Squad / Teams Shortcut */}
       <Card className="bg-glass border-white/5 box-glow overflow-hidden">
-        <div className="bg-secondary/50 p-2 flex items-center space-x-2 border-b border-white/5">
-          <Users className="w-3 h-3 text-muted-foreground ml-2" />
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">My Squad</span>
+        <div className="bg-secondary/50 p-2 flex items-center justify-between border-b border-white/5">
+          <div className="flex items-center space-x-2">
+            <Users className="w-3 h-3 text-cyan-500 ml-2" />
+            <span className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest">Squads & Clans</span>
+          </div>
+          <Link href="/teams" className="text-[10px] font-bold text-slate-400 hover:text-white uppercase px-2">Browse All</Link>
         </div>
         <CardContent className="p-4">
           {team ? (
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="text-sm font-black uppercase text-white">{team.name}</span>
-                <span className="text-[10px] text-cyan-400 font-bold uppercase">{team.members.length} Members</span>
-              </div>
-              <Badge variant="outline" className="border-primary/50 text-primary uppercase text-[10px] bg-primary/10">Active</Badge>
-            </div>
-          ) : (
-            isCreatingTeam ? (
-              <div className="space-y-2">
-                <Input 
-                  placeholder="Squad Name" 
-                  value={newTeamName} 
-                  onChange={(e) => setNewTeamName(e.target.value)}
-                  className="bg-black/50 border-white/10 text-xs"
-                />
-                <div className="flex gap-2">
-                  <Button onClick={handleCreateTeam} className="flex-1 bg-primary text-black font-bold uppercase text-xs h-8">Create</Button>
-                  <Button variant="ghost" onClick={() => setIsCreatingTeam(false)} className="flex-1 text-muted-foreground uppercase text-xs h-8">Cancel</Button>
+            <Link href={`/teams/${team.slug}`}>
+              <div className="flex items-center justify-between group cursor-pointer hover:bg-white/5 p-2 -m-2 rounded-sm transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-sm font-black uppercase text-white group-hover:text-cyan-400">{team.name}</span>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase">{team.members.length} Members</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 uppercase text-[10px] bg-cyan-500/10">Active</Badge>
+                  <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-cyan-400" />
                 </div>
               </div>
-            ) : (
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-muted-foreground">You are not in a squad.</p>
-                <Button onClick={() => setIsCreatingTeam(true)} variant="outline" size="sm" className="h-7 text-[10px] font-bold uppercase border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20">
+            </Link>
+          ) : (
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">You are not in a squad.</p>
+              <Link href="/teams/new">
+                <Button variant="outline" size="sm" className="h-7 text-[10px] font-bold uppercase border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20">
                   Form Squad
                 </Button>
-              </div>
-            )
+              </Link>
+            </div>
           )}
         </CardContent>
       </Card>

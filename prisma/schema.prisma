@@ -182,6 +182,7 @@ model TeamMember {
   teamId   String
   userId   String
   role     String   @default("MEMBER")
+  status   String   @default("ACTIVE")
   joinedAt DateTime @default(now())
 
   team     Team     @relation(fields: [teamId], references: [id])
