@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Gamepad2, Trophy, Zap, ChevronRight, MonitorPlay, Crosshair, Users, ChevronDown, Gamepad, MessageSquare, Twitter, DiscIcon as Discord } from 'lucide-react';
+import { Gamepad2, Trophy, Zap, ChevronRight, MonitorPlay, Crosshair, Users, ChevronDown, Gamepad, MessageSquare, DiscIcon as Discord } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -193,7 +193,6 @@ export function LandingPage() {
           <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-gray-600 text-xs uppercase tracking-widest">© 2026 Velox Esports. All Rights Reserved.</p>
             <div className="flex items-center space-x-4 text-gray-500">
-              <Twitter className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
               <Discord className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
               <MessageSquare className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
             </div>
