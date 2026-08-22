@@ -22,11 +22,12 @@ export default function NewTournament() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      if (!res.ok) throw new Error('Failed to create tournament');
+      const dataResponse = await res.json();
+      if (!res.ok) throw new Error(dataResponse.error || 'Failed to create tournament');
       router.push('/admin/tournaments');
       router.refresh();
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      alert(error.message);
       setLoading(false);
     }
   }
