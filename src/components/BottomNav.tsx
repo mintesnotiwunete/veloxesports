@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Home, Trophy, ListOrdered, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTelegram } from './TelegramProvider';
+import { triggerHaptic } from '@/lib/haptics';
 
 export function BottomNav() {
   const pathname = usePathname();
@@ -33,10 +34,11 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
+              onClick={() => triggerHaptic('selection')}
               className={cn(
                 "flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all duration-200",
                 isActive 
-                  ? "text-primary bg-primary/10 box-glow" 
+                  ? "text-primary bg-primary/10 box-glow scale-105" 
                   : "text-muted-foreground hover:text-foreground hover:bg-white/5"
               )}
             >
