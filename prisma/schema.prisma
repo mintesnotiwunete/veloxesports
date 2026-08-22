@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id               String   @id @default(cuid())
+  telegramId       BigInt   @unique
+  telegramUsername String?
+  firstName        String
+  lastName         String?
+  avatarUrl        String?
+  languageCode     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  lastActiveAt     DateTime @default(now())
+
+  registrations    Registration[]
+  payments         Payment[]
+  standings        Standing[]
+  discordAccount   DiscordAccount?
+}
+
+model Game {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logoUrl     String?
+  bannerUrl   String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  tournaments Tournament[]
+}
+
+model Tournament {
+  id                String   @id @default(cuid())
+  gameId            String
+  name              String
+  slug              String   @unique
+  description       String?
+  format            String
+  status            String   @default("UPCOMING")
+  entryFeeStars     Int      @default(0)
+  prizePool         String?
+  maxPlayers        Int
+  currentPlayers    Int      @default(0)
+  registrationStart DateTime
+  registrationEnd   DateTime
+  startTime         DateTime
+  endTime           DateTime?
+  region            String?
+  platform          String?
+  rules             String?
+  discordInvite     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  game              Game           @relation(fields: [gameId], references: [id])
+  registrations     Registration[]
+  payments          Payment[]
+  matches           Match[]
+  standings         Standing[]
+}
+
+model Registration {
+  id            String   @id @default(cuid())
+  userId        String
+  tournamentId  String
+  status        String   @default("PENDING")
+  registeredAt  DateTime @default(now())
+  seed          Int?
+  finalRank     Int?
+  totalPoints   Int      @default(0)
+
+  user          User       @relation(fields: [userId], references: [id])
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+  payment       Payment?
+}
+
+model Payment {
+  id                String   @id @default(cuid())
+  userId            String
+  tournamentId      String
+  registrationId    String   @unique
+  telegramPaymentId String?
+  invoicePayload    String   @unique
+  amountStars       Int
+  currency          String   @default("XTR")
+  status            String   @default("PENDING")
+  paidAt            DateTime?
+  createdAt         DateTime @default(now())
+
+  user              User         @relation(fields: [userId], references: [id])
+  tournament        Tournament   @relation(fields: [tournamentId], references: [id])
+  registration      Registration @relation(fields: [registrationId], references: [id])
+}
+
+model Match {
+  id           String   @id @default(cuid())
+  tournamentId String
+  round        Int
+  player1Id    String?
+  player2Id    String?
+  scheduledAt  DateTime?
+  status       String   @default("SCHEDULED")
+  player1Score Int      @default(0)
+  player2Score Int      @default(0)
+  winnerId     String?
+
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+}
+
+model Standing {
+  id            String   @id @default(cuid())
+  tournamentId  String
+  userId        String
+  rank          Int
+  matchesPlayed Int      @default(0)
+  wins          Int      @default(0)
+  losses        Int      @default(0)
+  draws         Int      @default(0)
+  points        Int      @default(0)
+
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+  user          User       @relation(fields: [userId], references: [id])
+}
+
+model DiscordAccount {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  discordUserId   String   @unique
+  discordUsername String
+  linkedAt        DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id])
+}
