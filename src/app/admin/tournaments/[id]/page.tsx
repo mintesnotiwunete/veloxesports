@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { TournamentManager } from './TournamentManager';
 
 export default async function ManageTournament({ params }: { params: { id: string } }) {
   const tournament = await prisma.tournament.findUnique({
@@ -20,11 +21,7 @@ export default async function ManageTournament({ params }: { params: { id: strin
          <p className="text-sm text-gray-400 font-medium mt-1">ID: {tournament.id}</p>
       </div>
 
-      <Card className="bg-[#0d1412] border-white/5">
-        <CardContent className="p-12 text-center text-gray-500 font-medium">
-          Tournament management features coming soon.
-        </CardContent>
-      </Card>
+      <TournamentManager tournament={tournament} />
     </div>
   );
 }

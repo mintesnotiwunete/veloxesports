@@ -507,3 +507,71 @@ export async function processPayout(payoutId: string, status: string) {
     return null;
   }
 }
+
+export async function getAllPlayers() {
+  try {
+    return await prisma.user.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        _count: {
+          select: { registrations: true, matchesWon: true }
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Failed to get players:', error);
+    return [];
+  }
+}
+
+export async function togglePlayerBan(userId: string, isBanned: boolean) {
+  try {
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { isBanned }
+    });
+  } catch (error) {
+    console.error('Failed to toggle ban:', error);
+    return null;
+  }
+}
+
+export async function deletePlayerAccount(userId: string) {
+  try {
+    // Basic cleanup, though real apps would need cascading deletes or careful cleanup
+    await prisma.user.delete({ where: { id: userId } });
+    return true;
+  } catch (error) {
+    console.error('Failed to delete player:', error);
+    return false;
+  }
+}
+
+export async function updateTournament(tournamentId: string, data: any) {
+  try {
+    return await prisma.tournament.update({
+      where: { id: tournamentId },
+      data
+    });
+  } catch (error) {
+    console.error('Failed to update tournament:', error);
+    return null;
+  }
+}
+
+export async function deleteTournament(tournamentId: string) {
+  try {
+    // Delete related records manually to avoid foreign key constraints errors if cascade is not set
+    await prisma.match.deleteMany({ where: { tournamentId } });
+    await prisma.standing.deleteMany({ where: { tournamentId } });
+    await prisma.payment.deleteMany({ where: { tournamentId } });
+    await prisma.registration.deleteMany({ where: { tournamentId } });
+    await prisma.payout.deleteMany({ where: { tournamentId } });
+    
+    await prisma.tournament.delete({ where: { id: tournamentId } });
+    return true;
+  } catch (error) {
+    console.error('Failed to delete tournament:', error);
+    return false;
+  }
+}
