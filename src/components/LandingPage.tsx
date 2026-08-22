@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 
 export function LandingPage() {
   const [isDark, setIsDark] = useState(true);
-  const botUrl = process.env.NEXT_PUBLIC_APP_URL ? process.env.NEXT_PUBLIC_APP_URL.replace('https://', 't.me/veloxesportsbot/app') : 'https://t.me/veloxesportsbot/app';
+  const botUrl = 'https://t.me/veloxesportsbot/app';
 
   // Apply dark class to HTML or body
   useEffect(() => {
@@ -54,11 +54,11 @@ export function LandingPage() {
             <button onClick={() => setIsDark(!isDark)} className={`p-2 rounded-full transition-colors ${isDark ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'hover:bg-slate-200 text-slate-500 hover:text-slate-900'}`}>
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <Link href={botUrl}>
+            <a href={botUrl} target="_blank" rel="noopener noreferrer">
               <Button className={`bg-transparent border rounded-sm px-8 uppercase font-bold tracking-widest text-xs box-glow transition-colors ${isDark ? 'border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10' : 'border-cyan-500 text-cyan-600 hover:bg-cyan-50'}`}>
                 Join Now
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </header>
@@ -76,11 +76,11 @@ export function LandingPage() {
               <p className={`text-lg max-w-md font-medium leading-relaxed ${isDark ? 'text-gray-400' : 'text-slate-600'}`}>
                 Compete in high-stakes tournaments across the world's most exciting titles. Join thousands of players battling for glory, cash prizes, and recognition.
               </p>
-              <Link href={botUrl} className="inline-block">
+              <a href={botUrl} target="_blank" rel="noopener noreferrer" className="inline-block">
                 <Button size="lg" className={`border rounded-sm px-10 h-14 text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 box-glow ${isDark ? 'bg-cyan-950/40 border-cyan-500/50 text-cyan-400 hover:bg-cyan-900/60' : 'bg-cyan-50 border-cyan-500 text-cyan-600 hover:bg-cyan-100'}`}>
                   Register Now
                 </Button>
-              </Link>
+              </a>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} viewport={{ once: true }} className="relative w-full h-[600px] hidden lg:flex items-center justify-center">
@@ -126,11 +126,11 @@ export function LandingPage() {
                     <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>Prize Pool</span>
                     <span className={`font-bold tracking-wider ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>{t.prize}</span>
                   </div>
-                  <Link href={botUrl}>
+                  <a href={botUrl} target="_blank" rel="noopener noreferrer">
                     <Button className={`w-full mt-6 font-bold uppercase tracking-widest text-xs h-12 transition-colors ${isDark ? 'bg-white/5 hover:bg-cyan-500/20 text-white' : 'bg-slate-100 hover:bg-cyan-50 text-cyan-700 hover:text-cyan-800'}`}>
                       Join Bracket
                     </Button>
-                  </Link>
+                  </a>
                 </div>
               </motion.div>
             ))}
