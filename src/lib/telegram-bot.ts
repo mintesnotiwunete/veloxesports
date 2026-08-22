@@ -7,7 +7,7 @@ export async function sendTelegramNotification(telegramUserId: string | bigint, 
   }
 
   try {
-    const response = await fetch("https://api.telegram.org/bot${botToken}/sendMessage", {
+    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

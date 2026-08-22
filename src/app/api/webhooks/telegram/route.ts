@@ -78,6 +78,33 @@ export async function POST(req: Request) {
         }
       }
       
+    // Handle /start command
+    if (update.message?.text === '/start' || update.message?.text === '/open') {
+      const chatId = update.message.chat.id;
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://velox-esports.vercel.app';
+      
+      const welcomeText = `🚀 <b>Welcome to Velox Esports!</b>\n\nThe ultimate arena for competitive gaming on Telegram.\n\n🏆 <b>Play Tournaments</b>\n💰 <b>Earn Real Prizes</b>\n🎮 <b>Prove Your Skill</b>\n\nTap the button below to launch the command center and enter the arena.`;
+
+      // You can send a photo by using sendPhoto instead of sendMessage
+      const imageUrl = `${appUrl}/logo.png`; // Ensure this is a fully qualified URL to your logo
+
+      await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          photo: imageUrl,
+          caption: welcomeText,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🕹️ Launch Velox App', web_app: { url: appUrl } }],
+              [{ text: '🌐 Join Community', url: 'https://t.me/veloxesports' }]
+            ]
+          }
+        })
+      });
       return NextResponse.json({ success: true });
     }
 
