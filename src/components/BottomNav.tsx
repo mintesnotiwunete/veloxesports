@@ -31,7 +31,7 @@ export function BottomNav() {
       <nav className="mx-auto max-w-md bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl pointer-events-auto box-glow">
         <ul className="flex justify-between items-center relative">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = item.href === '/' ? pathname === '/' : pathname?.startsWith(item.href);
             return (
               <li key={item.href} className="flex-1 relative z-10">
                 <Link

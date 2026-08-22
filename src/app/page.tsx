@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { LandingPage } from '@/components/LandingPage';
 import { getActiveTournaments, getUserMatches, getUserTeam, createTeam, getAnnouncements, getUnreadNotificationCount } from '@/app/actions';
 import { triggerHaptic } from '@/lib/haptics';
+import { getGamePlaceholderImage } from '@/lib/placeholders';
 import { Input } from '@/components/ui/input';
 
 export default function Home() {
@@ -175,11 +176,14 @@ export default function Home() {
 
       {/* Hero Banner */}
       {featured && (
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/20 via-background to-secondary border border-primary/30 p-6 box-glow">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <Gamepad2 className="w-32 h-32" />
-          </div>
-          <Badge variant="outline" className="border-primary text-primary bg-primary/10 mb-4">LIVE NOW</Badge>
+        <div 
+          className="relative overflow-hidden rounded-3xl border border-primary/30 p-6 box-glow bg-cover bg-center"
+          style={{ backgroundImage: `url(${featured.bannerUrl || getGamePlaceholderImage(featured.game.slug)})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/40" />
+          
+          <div className="relative z-10">
+            <Badge variant="outline" className="border-primary text-primary bg-primary/10 mb-4">LIVE NOW</Badge>
           <h1 className="text-4xl font-display font-black uppercase italic leading-none mb-2">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">{featured.name.split(' ')[0]}</span>
             <br />{featured.name.split(' ').slice(1).join(' ')}
@@ -188,6 +192,7 @@ export default function Home() {
           <Link href={`/tournaments/${featured.slug}`} className="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-bold transition-all bg-primary text-primary-foreground hover:bg-primary/80 h-10 px-6 box-glow uppercase tracking-wider">
             Join Tournament <ChevronRight className="ml-1 w-4 h-4" />
           </Link>
+          </div>
         </div>
       )}
 
@@ -205,9 +210,11 @@ export default function Home() {
             <Link key={t.id} href={`/tournaments/${t.slug}`}>
               <Card className="bg-glass border-white/5 hover:border-primary/50 transition-all hover:box-glow overflow-hidden group">
                 <div className="flex h-24">
-                  <div className="w-1/3 bg-secondary flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Gamepad2 className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <div 
+                    className="w-1/3 bg-cover bg-center relative overflow-hidden border-r border-white/5"
+                    style={{ backgroundImage: `url(${t.bannerUrl || getGamePlaceholderImage(t.game.slug)})` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background" />
                   </div>
                   <div className="w-2/3 p-3 flex flex-col justify-between">
                     <div>

@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { getAllTournaments, getAllGames } from '@/app/actions';
 import { triggerHaptic } from '@/lib/haptics';
+import { getGamePlaceholderImage } from '@/lib/placeholders';
 
 export default function TournamentsPage() {
   const [games, setGames] = useState<{ id: string; name: string; slug: string }[]>([]);
@@ -167,7 +168,13 @@ export default function TournamentsPage() {
                 className="block group"
               >
                 <Card className="bg-card/80 border-white/10 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)] overflow-hidden rounded-2xl">
-                  <CardContent className="p-4 space-y-3">
+                  <div 
+                    className="h-24 w-full bg-cover bg-center border-b border-white/10 relative" 
+                    style={{ backgroundImage: `url(${t.bannerUrl || getGamePlaceholderImage(t.game?.slug)})` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+                  </div>
+                  <CardContent className="p-4 pt-2 space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md bg-cyan-950/50 text-cyan-400 border border-cyan-500/30">
                         {t.game?.name || 'Esports'}

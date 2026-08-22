@@ -24,6 +24,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { TournamentBracket } from '@/components/TournamentBracket';
 import { getTournament } from '@/app/actions';
 import { triggerHaptic } from '@/lib/haptics';
+import { getGamePlaceholderImage } from '@/lib/placeholders';
 
 export default function TournamentPage() {
   const params = useParams();
@@ -210,8 +211,13 @@ export default function TournamentPage() {
 
       {/* Hero Header Banner */}
       <div className="px-4">
-        <div className="relative rounded-3xl bg-gradient-to-b from-[#0e1816] via-card to-[#091110] border border-cyan-500/30 p-6 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 blur-[80px] rounded-full pointer-events-none" />
+        <div 
+          className="relative rounded-3xl border border-cyan-500/30 p-6 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden bg-cover bg-center"
+          style={{ backgroundImage: `url(${tournament.bannerUrl || getGamePlaceholderImage(tournament.game?.slug)})` }}
+        >
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1816] via-[#091110]/80 to-transparent" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/20 blur-[80px] rounded-full pointer-events-none" />
 
           <div className="relative z-10 space-y-3">
             <div className="flex justify-between items-center">
