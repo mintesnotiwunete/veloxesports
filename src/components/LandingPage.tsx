@@ -38,7 +38,8 @@ export function LandingPage() {
       {/* Navbar */}
       <header className={`fixed top-0 w-full z-50 border-b transition-colors duration-500 backdrop-blur-md ${isDark ? 'bg-[#070b0a]/80 border-white/5' : 'bg-white/80 border-slate-200'}`}>
         <div className="container mx-auto px-6 h-24 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            <img src="/logo.png" alt="Velox Logo" className="w-10 h-10 rounded-xl" />
             <span className={`text-3xl font-display font-black tracking-widest uppercase transition-colors ${isDark ? 'text-white drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]' : 'text-slate-900 drop-shadow-[0_0_15px_rgba(0,255,255,0.3)]'}`}>VELOX</span>
           </div>
           
@@ -184,7 +185,10 @@ export function LandingPage() {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">
-              <span className={`text-4xl font-display font-black tracking-widest uppercase transition-colors ${isDark ? 'text-white drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]' : 'text-slate-900 drop-shadow-[0_0_15px_rgba(0,255,255,0.3)]'}`}>VELOX</span>
+              <div className="flex items-center space-x-3">
+                <img src="/logo.png" alt="Velox Logo" className="w-12 h-12 rounded-xl" />
+                <span className={`text-4xl font-display font-black tracking-widest uppercase transition-colors ${isDark ? 'text-white drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]' : 'text-slate-900 drop-shadow-[0_0_15px_rgba(0,255,255,0.3)]'}`}>VELOX</span>
+              </div>
               <p className={`mt-6 max-w-sm leading-relaxed text-sm ${isDark ? 'text-gray-500' : 'text-slate-500'}`}>
                 The ultimate platform for competitive gaming on Telegram. Seamlessly register, compete, and get paid instantly using Telegram Stars.
               </p>

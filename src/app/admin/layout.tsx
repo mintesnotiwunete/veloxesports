@@ -14,7 +14,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className="w-64 bg-[#0d1412] border-r border-white/5 flex flex-col">
         <div className="p-6 border-b border-white/5">
-          <span className="text-2xl font-display font-black tracking-widest text-cyan-400 uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">VELOX</span>
+          <div className="flex items-center space-x-3 mb-1">
+            <img src="/logo.png" alt="Velox Logo" className="w-8 h-8 rounded-lg" />
+            <span className="text-2xl font-display font-black tracking-widest text-cyan-400 uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">VELOX</span>
+          </div>
           <span className="text-xs block text-gray-500 font-bold uppercase tracking-widest mt-1">Command Center</span>
         </div>
         
