@@ -4,9 +4,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Trophy, ListOrdered, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTelegram } from './TelegramProvider';
 
 export function BottomNav() {
   const pathname = usePathname();
+  const { initData, isReady } = useTelegram();
+
+  // Hide BottomNav if we are on the admin page, or if we are not inside Telegram
+  if (pathname?.startsWith('/admin')) return null;
+  
+  if (process.env.NODE_ENV === 'production' && !initData) return null;
+  // in dev, we might mock initData, but if it's explicitly null, hide it to test landing page
+  if (!initData) return null;
 
   const links = [
     { href: '/', icon: Home, label: 'Hub' },
