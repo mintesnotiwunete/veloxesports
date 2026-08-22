@@ -17,18 +17,21 @@ export default async function AdminDashboard() {
   ]);
 
   const stats = [
-    { name: 'Total Players', value: userCount, icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { name: 'Active Tournaments', value: tournamentCount, icon: Trophy, color: 'text-primary', bg: 'bg-primary/10' },
-    { name: 'Supported Games', value: gameCount, icon: Gamepad2, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-    { name: 'Stars Collected', value: payments._sum.amountStars || 0, icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
+    { name: 'Total Players', value: userCount, icon: Users, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-500/20' },
+    { name: 'Active Tournaments', value: tournamentCount, icon: Trophy, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-500/20' },
+    { name: 'Supported Games', value: gameCount, icon: Gamepad2, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-500/20' },
+    { name: 'Stars Collected', value: payments._sum.amountStars || 0, icon: Star, color: 'text-yellow-400', bg: 'bg-yellow-950/40 border-yellow-500/20' },
   ];
 
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-display font-bold uppercase tracking-wider">Overview</h1>
-        <Link href="/admin/tournaments/new" className="bg-primary text-primary-foreground px-4 py-2 rounded-md font-bold uppercase tracking-widest text-sm box-glow hover:bg-primary/80 transition-colors">
-          + Create Tournament
+        <div>
+           <h1 className="text-3xl font-display font-black uppercase tracking-wider text-white">Dashboard Overview</h1>
+           <p className="text-sm text-gray-400 font-medium mt-1">Welcome back, Commander.</p>
+        </div>
+        <Link href="/admin/tournaments/new" className="bg-cyan-950/40 border border-cyan-500/50 text-cyan-400 px-6 py-3 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-cyan-900/60 transition-all box-glow">
+          + Launch Tournament
         </Link>
       </div>
       
@@ -36,13 +39,13 @@ export default async function AdminDashboard() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.name} className="bg-glass border-white/5">
+            <Card key={stat.name} className="bg-[#0d1412] border-white/5">
               <CardContent className="p-6 flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">{stat.name}</p>
-                  <h3 className="text-4xl font-display font-black">{stat.value}</h3>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">{stat.name}</p>
+                  <h3 className="text-4xl font-display font-black text-white">{stat.value}</h3>
                 </div>
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.bg}`}>
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center border ${stat.bg}`}>
                   <Icon className={`w-6 h-6 ${stat.color}`} />
                 </div>
               </CardContent>
@@ -51,11 +54,23 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      {/* Recent Activity Placeholder */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-display font-bold uppercase tracking-wider mb-4">Recent Registrations</h2>
-        <Card className="bg-glass border-white/5">
-          <CardContent className="p-8 text-center text-muted-foreground">
+      <div className="mt-12">
+        <div className="flex items-center space-x-4 mb-6 opacity-80">
+          <div className="flex space-x-1">
+             <div className="w-3 h-1 bg-cyan-500 skew-x-12" />
+             <div className="w-2 h-1 bg-cyan-500 skew-x-12" />
+             <div className="w-1 h-1 bg-cyan-500 skew-x-12" />
+          </div>
+          <span className="text-cyan-400 font-display uppercase tracking-widest text-sm font-bold">Recent Activity</span>
+          <div className="flex space-x-1">
+             <div className="w-1 h-1 bg-cyan-500 -skew-x-12" />
+             <div className="w-2 h-1 bg-cyan-500 -skew-x-12" />
+             <div className="w-3 h-1 bg-cyan-500 -skew-x-12" />
+          </div>
+        </div>
+        
+        <Card className="bg-[#0d1412] border-white/5">
+          <CardContent className="p-12 text-center text-gray-500 font-medium">
             No recent activity to display.
           </CardContent>
         </Card>
