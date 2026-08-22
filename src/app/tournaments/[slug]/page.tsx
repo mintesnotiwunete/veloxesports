@@ -21,7 +21,7 @@ export default function TournamentPage() {
   useEffect(() => {
     setTimeout(() => {
       setTournament({
-        id: 'cm02vnt3h000008lc6w230z9g', 
+        id: 'cmt4cm7w2000314bhmgav86go', 
         name: 'Winter Clash 2026',
         game: { name: 'Fortnite' },
         status: 'REGISTRATION_OPEN',
