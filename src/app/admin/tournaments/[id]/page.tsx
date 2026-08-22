@@ -3,9 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { TournamentManager } from './TournamentManager';
 
-export default async function ManageTournament({ params }: { params: { id: string } }) {
+export default async function ManageTournament({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const tournament = await prisma.tournament.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: { game: true }
   });
 
