@@ -84,12 +84,25 @@ export async function requestToJoinTeam(telegramId: number | bigint | string, te
 
     if (existing) return existing;
 
+    const team = await prisma.team.findUnique({ where: { id: teamId } });
+    if (!team) return null;
+
     const member = await prisma.teamMember.create({
       data: {
         teamId,
         userId: user.id,
         role: 'MEMBER',
         status: 'PENDING'
+      }
+    });
+
+    // Notify the captain
+    await prisma.notification.create({
+      data: {
+        userId: team.captainId,
+        title: 'New Squad Request',
+        message: `${user.firstName} wants to join your squad: ${team.name}.`,
+        type: `TEAM_REQUEST:${team.slug}`
       }
     });
     
@@ -122,10 +135,29 @@ export async function manageTeamRequest(telegramId: number | bigint | string, me
         where: { id: memberId },
         data: { status: 'ACTIVE' }
       });
+      await prisma.notification.create({
+        data: {
+          userId: memberRecord.userId,
+          title: 'Squad Application Accepted!',
+          message: `You are now a member of ${memberRecord.team.name}!`,
+          type: `TEAM_ACCEPT:${memberRecord.team.slug}`
+        }
+      });
     } else {
       await prisma.teamMember.delete({
         where: { id: memberId }
       });
+      // Optionally notify them of rejection, though sometimes silent is preferred.
+      if (action === 'REJECT') {
+        await prisma.notification.create({
+          data: {
+            userId: memberRecord.userId,
+            title: 'Squad Application Rejected',
+            message: `Your request to join ${memberRecord.team.name} was declined.`,
+            type: 'INFO'
+          }
+        });
+      }
     }
     
     revalidatePath('/teams/[slug]', 'page');

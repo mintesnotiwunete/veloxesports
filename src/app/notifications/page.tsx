@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTelegram } from '@/components/TelegramProvider';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Bell, ChevronLeft, Check, Trophy, Swords, Zap, Info } from 'lucide-react';
+import { Bell, ChevronLeft, Check, Trophy, Swords, Zap, Info, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getUserNotifications, markNotificationsRead } from '@/app/actions';
@@ -36,6 +36,8 @@ export default function NotificationsPage() {
       case 'MATCH': return <Swords className="w-5 h-5 text-red-400" />;
       case 'REWARD': return <Zap className="w-5 h-5 text-yellow-400" />;
       case 'TOURNAMENT': return <Trophy className="w-5 h-5 text-cyan-400" />;
+      case 'TEAM_REQUEST': 
+      case 'TEAM_ACCEPT': return <Users className="w-5 h-5 text-cyan-400" />;
       default: return <Info className="w-5 h-5 text-muted-foreground" />;
     }
   };
@@ -61,25 +63,41 @@ export default function NotificationsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {notifications.map((notif) => (
-            <Card key={notif.id} className={`bg-glass p-4 border ${notif.isRead ? 'border-white/5 opacity-70' : 'border-cyan-500/30 box-glow'}`}>
-              <div className="flex items-start space-x-3">
-                <div className={`p-2 rounded-xl border ${notif.isRead ? 'bg-black/30 border-white/5' : 'bg-cyan-950/40 border-cyan-500/30'}`}>
-                  {getIconForType(notif.type)}
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <h4 className="font-bold text-sm text-white uppercase">{notif.title}</h4>
-                    {!notif.isRead && <div className="w-2 h-2 rounded-full bg-cyan-400 mt-1 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />}
+          {notifications.map((notif) => {
+            const isTeamNotif = notif.type.startsWith('TEAM_');
+            const teamSlug = isTeamNotif ? notif.type.split(':')[1] : null;
+
+            return (
+              <Card key={notif.id} className={`bg-glass p-4 border ${notif.isRead ? 'border-white/5 opacity-70' : 'border-cyan-500/30 box-glow'}`}>
+                <div className="flex items-start space-x-3">
+                  <div className={`p-2 rounded-xl border ${notif.isRead ? 'bg-black/30 border-white/5' : 'bg-cyan-950/40 border-cyan-500/30'}`}>
+                    {getIconForType(notif.type.split(':')[0])}
                   </div>
-                  <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{notif.message}</p>
-                  <p className="text-[9px] text-muted-foreground/50 mt-2 font-mono">
-                    {new Date(notif.createdAt).toLocaleDateString()}
-                  </p>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-bold text-sm text-white uppercase">{notif.title}</h4>
+                      {!notif.isRead && <div className="w-2 h-2 rounded-full bg-cyan-400 mt-1 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />}
+                    </div>
+                    <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{notif.message}</p>
+                    
+                    {isTeamNotif && teamSlug && (
+                      <div className="mt-3">
+                        <Link href={`/teams/${teamSlug}`}>
+                          <Button size="sm" className="h-7 text-[10px] font-bold uppercase tracking-widest bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500 hover:text-black">
+                            {notif.type.startsWith('TEAM_REQUEST') ? 'Review Request' : 'View Squad'}
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
+
+                    <p className="text-[9px] text-muted-foreground/50 mt-2 font-mono">
+                      {new Date(notif.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
       )}
     </div>
